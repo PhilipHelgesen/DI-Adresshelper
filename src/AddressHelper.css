@@ -16,3 +16,12 @@ body {
 .address-confirmed {
   border-bottom: 3px solid limegreen !important;
 }
+
+.address-input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.address-input {
+  width: 100%;
+}
