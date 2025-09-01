@@ -32,6 +32,9 @@ function App() {
     number | null
   >(null);
   const [streetNumbers, setStreetNumbers] = useState<number[]>([]);
+  const [streetNumbersData, setStreetNumbersData] = useState<
+    StreetNumberData[] | null
+  >(null);
 
   const handleStreetSearch = async (
     _event: React.SyntheticEvent,
@@ -82,6 +85,8 @@ function App() {
         new Set(data.streetNumbers.map((streetNr) => streetNr.streetNo))
       );
 
+      setStreetNumbersData(data.streetNumbers);
+
       setStreetNumbers(uniqueNumbers);
     } catch (error) {
       console.error("Failed to fetch street numbers:", error);
@@ -114,13 +119,34 @@ function App() {
             forcePopupIcon={false}
           />
           <Autocomplete
-            className={`${selectedStreetNumber ? "address-confirmed" : ""}`}
+            className={`address-input-number ${
+              selectedStreetNumber ? "address-confirmed" : ""
+            }`}
             getOptionLabel={(option) => option.toString()}
             renderInput={(params) => <TextField {...params} label="GateNr." />}
             options={streetNumbers}
             forcePopupIcon={false}
             onChange={handleSelectingStreetNumber}
             value={selectedStreetNumber}
+          />
+        </div>
+        <div className="address-input-row">
+          <TextField
+            className={` ${selectedStreetNumber ? "address-confirmed" : ""}`}
+            label="PostNr."
+            value={
+              streetNumbersData?.find(
+                (item) => item.streetNo === selectedStreetNumber
+              )?.postalCode || ""
+            }
+            disabled
+          />
+
+          <TextField
+            className={` ${selectedStreetNumber ? "address-confirmed" : ""}`}
+            label="Poststed"
+            value={selectedStreet?.city || ""}
+            disabled
           />
         </div>
       </div>

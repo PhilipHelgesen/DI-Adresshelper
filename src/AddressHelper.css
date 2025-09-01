@@ -10,10 +10,10 @@ body {
   background-color: white;
   border-radius: 12px;
   padding: 15px 20px;
-  width: 500px;
+  width: 400px;
 }
 
-.address-confirmed {
+.address-confirmed .MuiOutlinedInput-root {
   border-bottom: 3px solid limegreen !important;
 }
 
@@ -22,6 +22,11 @@ body {
   gap: 10px;
 }
 
+.address-input-number {
+  width: 150px;
+}
+
 .address-input {
   width: 100%;
+  margin-bottom: 25px;
 }
