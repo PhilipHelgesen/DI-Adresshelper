@@ -17,7 +17,6 @@ export function useAddress() {
     _event: React.SyntheticEvent,
     value: string
   ) => {
-    console.log(value);
     if (value.length < 2) return;
 
     try {
