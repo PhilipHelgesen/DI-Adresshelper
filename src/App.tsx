@@ -10,6 +10,7 @@ interface Street {
 
 function App() {
   const [streets, setStreets] = useState<Street[]>([]);
+  const [selectedStreet, setSelectedStreet] = useState<Street | null>(null);
 
   const handleStreetSearch = async (
     _event: React.SyntheticEvent,
@@ -30,11 +31,20 @@ function App() {
     setStreets(data.streets);
   };
 
+  const handleSelectingStreet = (
+    _event: React.SyntheticEvent,
+    value: Street | null
+  ) => {
+    setSelectedStreet(value);
+  };
+
   return (
     <>
       <div className="address-container">
         <Autocomplete
+          className={`${selectedStreet ? "address-confirmed" : ""}`}
           onInputChange={handleStreetSearch}
+          onChange={handleSelectingStreet}
           options={streets}
           getOptionLabel={(option) => option.streetName}
           renderInput={(params) => <TextField {...params} label="Gatenavn" />}

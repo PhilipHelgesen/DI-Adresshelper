@@ -12,3 +12,7 @@ body {
   padding: 15px 20px;
   width: 500px;
 }
+
+.address-confirmed {
+  border-bottom: 3px solid limegreen !important;
+}
