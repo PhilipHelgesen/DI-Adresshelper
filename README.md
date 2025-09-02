@@ -29,7 +29,7 @@ npm install
 1. make a new file: .env
 2. add this line and replace "your-api-key" with your own API key
 ```typescript
-export const VITE_DI_API_KEY= = 'your-api-key-here';
+VITE_DI_API_KEY="your-api-key-here"
 ```
 ### 4. Start the server
 ```bash
