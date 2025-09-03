@@ -36,7 +36,7 @@ VITE_DI_API_KEY="your-api-key-here"
 npm run dev
 ```
 ## Usage
-1. **Search for a street**: Type at least 2 characters in the "GAtenavn" field.
+1. **Search for a street**: Type at least 2 characters in the "Gatenavn" field.
 2. **Select Street**: Choose from the dropdown (all addresses shows "Streetname, City").
 3. **Select Street Number**: Pick one of the available street numbers gathered from the api.
 4. **Postalcode and City**: These fields will be automatically be filled with data collected from the two previous selections.
