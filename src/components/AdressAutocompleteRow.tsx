@@ -15,6 +15,7 @@ interface Props {
     event: React.SyntheticEvent,
     value: number | null
   ) => void;
+    isLoading: boolean;
 }
 
 export function AddressAutocompleteRow({
@@ -25,9 +26,11 @@ export function AddressAutocompleteRow({
   handleStreetSearch,
   handleSelectingStreet,
   handleSelectingStreetNumber,
+    isLoading,
 }: Props) {
   return (
     <div className="address-input-row">
+
       <Autocomplete
         className={`address-input ${selectedStreet ? "address-confirmed" : ""}`}
         onInputChange={handleStreetSearch}
@@ -38,6 +41,7 @@ export function AddressAutocompleteRow({
         }
         renderInput={(params) => <TextField {...params} label="Gatenavn" />}
         forcePopupIcon={false}
+        loading={isLoading}
       />
       <Autocomplete
         className={`address-input-number ${

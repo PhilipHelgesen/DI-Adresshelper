@@ -1,4 +1,4 @@
-import { AddressHelper } from "./componets/AddressHelper";
+import {AddressHelper} from "./components/AddressHelper.tsx";
 
 function App() {
   return <AddressHelper />;

@@ -13,6 +13,8 @@ export function AddressInfoRow({
   streetNumbersData,
   selectedStreet,
 }: Props) {
+
+
   return (
     <div className="address-input-row">
       <TextField
@@ -26,7 +28,7 @@ export function AddressInfoRow({
         disabled
       />
       <TextField
-        className={` ${selectedStreetNumber ? "address-confirmed" : ""}`}
+        className={` ${selectedStreet ? "address-confirmed" : ""}`}
         label="Poststed"
         value={selectedStreet?.city || ""}
         disabled

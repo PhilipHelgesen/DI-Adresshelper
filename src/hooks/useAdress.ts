@@ -1,91 +1,104 @@
-import { useState } from "react";
-import type { Street, StreetResponse } from "../types/Street";
-import type { StreetNumberData, StreetNumberResponse } from "../types/StreetNumber";
+import {useState} from "react";
+import type {Street, StreetResponse} from "../types/Street";
+import type {StreetNumberData, StreetNumberResponse} from "../types/StreetNumber";
 
 export function useAddress() {
-  const [streets, setStreets] = useState<Street[]>([]);
-  const [selectedStreet, setSelectedStreet] = useState<Street | null>(null);
-  const [selectedStreetNumber, setSelectedStreetNumber] = useState<
-    number | null
-  >(null);
-  const [streetNumbers, setStreetNumbers] = useState<number[]>([]);
-  const [streetNumbersData, setStreetNumbersData] = useState<
-    StreetNumberData[] | null
-  >(null);
+    const [streets, setStreets] = useState<Street[]>([]);
+    const [selectedStreet, setSelectedStreet] = useState<Street | null>(null);
+    const [selectedStreetNumber, setSelectedStreetNumber] = useState<
+        number | null
+    >(null);
+    const [streetNumbers, setStreetNumbers] = useState<number[]>([]);
+    const [streetNumbersData, setStreetNumbersData] = useState<
+        StreetNumberData[] | null
+    >(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-  const handleStreetSearch = async (
-    _event: React.SyntheticEvent,
-    value: string
-  ) => {
-    if (value.length < 2) return;
+    const handleStreetSearch = async (
+        _event: React.SyntheticEvent,
+        value: string
+    ) => {
+        if (value.length < 2) return;
 
-    try {
-      const res = await fetch(
-        `https://staging-ws.di.no/ws/json/addressHelper/v-2/NO/streetSearch/${value}?apiKey=${import.meta.env.VITE_API_KEY
-        }`,
-        { headers: { referer: "http://localhost:5173" } }
-      );
 
-      const data: StreetResponse = await res.json();
-      setStreets(data.streets);
-    } catch (error) {
-      console.error("Failed to fetch streets:", error);
-      setStreets([]);
-    }
-  };
+        try {
+            setIsLoading(true);
+            const res = await fetch(
+                `https://staging-ws.di.no/ws/json/addressHelper/v-2/NO/streetSearch/${value}?apiKey=${import.meta.env.VITE_API_KEY
+                }`,
+                {headers: {referer: "http://localhost:5173"}}
+            );
 
-  const handleSelectingStreet = async (
-    _event: React.SyntheticEvent,
-    value: Street | null
-  ) => {
-    setSelectedStreet(value);
+            if (!res.ok) {
+                setStreets([]);
+                return;
+            }
 
-    setSelectedStreetNumber(null);
-    setStreetNumbers([]);
+            setIsLoading(false)
 
-    if (!value) {
-      setStreetNumbers([]);
-      return;
-    }
+            const data: StreetResponse = await res.json();
+            setStreets(data.streets)
 
-    const streetIds = value.streetIds.join(",");
-    try {
-      const res = await fetch(
-        `https://staging-ws.di.no/ws/json/addressHelper/v-2/NO/streetNumberSearch/${streetIds}?apiKey=${import.meta.env.VITE_API_KEY
-        }`,
-        { headers: { referer: "http://localhost:5173" } }
-      );
 
-      const data: StreetNumberResponse = await res.json();
+        } catch (error) {
+            console.error("Failed to fetch streets:", error);
+            setStreets([]);
+        }
+    };
 
-      const uniqueNumbers = Array.from(
-        new Set(data.streetNumbers.map((streetNr) => streetNr.streetNo))
-      );
+    const handleSelectingStreet = async (
+        _event: React.SyntheticEvent,
+        value: Street | null
+    ) => {
+        setSelectedStreet(value);
 
-      setStreetNumbersData(data.streetNumbers);
+        setSelectedStreetNumber(null);
+        setStreetNumbers([]);
 
-      setStreetNumbers(uniqueNumbers);
-    } catch (error) {
-      console.error("Failed to fetch street numbers:", error);
-      setStreetNumbers([]);
-    }
-  };
+        if (!value) {
+            setStreetNumbers([]);
+            return;
+        }
 
-  const handleSelectingStreetNumber = (
-    _event: React.SyntheticEvent,
-    value: number | null
-  ) => {
-    setSelectedStreetNumber(value);
-  };
+        const streetIds = value.streetIds.join(",");
+        try {
+            const res = await fetch(
+                `https://staging-ws.di.no/ws/json/addressHelper/v-2/NO/streetNumberSearch/${streetIds}?apiKey=${import.meta.env.VITE_API_KEY
+                }`,
+                {headers: {referer: "http://localhost:5173"}}
+            );
 
-  return {
-    streets,
-    selectedStreet,
-    selectedStreetNumber,
-    streetNumbers,
-    streetNumbersData,
-    handleStreetSearch,
-    handleSelectingStreet,
-    handleSelectingStreetNumber,
-  };
+            const data: StreetNumberResponse = await res.json();
+
+            const uniqueNumbers = Array.from(
+                new Set(data.streetNumbers.map((streetNr) => streetNr.streetNo))
+            );
+
+            setStreetNumbersData(data.streetNumbers);
+
+            setStreetNumbers(uniqueNumbers);
+        } catch (error) {
+            console.error("Failed to fetch street numbers:", error);
+            setStreetNumbers([]);
+        }
+    };
+
+    const handleSelectingStreetNumber = (
+        _event: React.SyntheticEvent,
+        value: number | null
+    ) => {
+        setSelectedStreetNumber(value);
+    };
+
+    return {
+        streets,
+        selectedStreet,
+        selectedStreetNumber,
+        streetNumbers,
+        streetNumbersData,
+        handleStreetSearch,
+        handleSelectingStreet,
+        handleSelectingStreetNumber,
+        isLoading
+    };
 }

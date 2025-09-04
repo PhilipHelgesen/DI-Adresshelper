@@ -1,6 +1,7 @@
 import { useAddress } from "../hooks/useAdress";
 import { AddressAutocompleteRow } from "./AdressAutocompleteRow";
 import { AddressInfoRow } from "./AdressInfoRow";
+import Map from "./Map";
 
 export function AddressHelper() {
   const {
@@ -12,7 +13,10 @@ export function AddressHelper() {
     handleStreetSearch,
     handleSelectingStreet,
     handleSelectingStreetNumber,
+      isLoading,
   } = useAddress();
+
+  const selectedStreetNumberData = streetNumbersData?.find((streetData) => streetData.streetNo === selectedStreetNumber);
 
   return (
     <div className="address-container">
@@ -24,12 +28,18 @@ export function AddressHelper() {
         handleStreetSearch={handleStreetSearch}
         handleSelectingStreet={handleSelectingStreet}
         handleSelectingStreetNumber={handleSelectingStreetNumber}
+        isLoading={isLoading}
       />
       <AddressInfoRow
         selectedStreetNumber={selectedStreetNumber}
         streetNumbersData={streetNumbersData}
         selectedStreet={selectedStreet}
       />
+        {selectedStreetNumberData && (
+            <Map posix={[selectedStreetNumberData.latitude, selectedStreetNumberData.longitude]} zoom={19} />
+        )}
+
+
     </div>
   );
 }
